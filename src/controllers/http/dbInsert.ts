@@ -97,6 +97,7 @@ export function dbInsert(app: FastifyZodTypedInstance) {
         }),
         response: {
           200: z.object({
+            message: z.string(),
             inserted_racionalizados: z.number(),
             racionalizados_time_in_ms: z.number(),
             inserted_comunizados: z.number(),
@@ -215,6 +216,7 @@ export function dbInsert(app: FastifyZodTypedInstance) {
         const totalTimeProdutos = produtosTime + produtos_time_in_ms
 
         return reply.send({
+          message: 'Registros inseridos com sucesso',
           inserted_racionalizados,
           racionalizados_time_in_ms: totalTimeRacionalizados,
           inserted_comunizados,
