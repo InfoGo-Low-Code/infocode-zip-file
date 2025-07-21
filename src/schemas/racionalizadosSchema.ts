@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const racionalizadosSchema = z.object({
-  Produto: z.string(),
+  Produto: z.coerce.string(),
   CodigoProduto: z.string(),
   Descricao: z.string(),
   Comercializado: z.boolean(),

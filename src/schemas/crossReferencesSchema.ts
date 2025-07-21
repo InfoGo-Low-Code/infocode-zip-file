@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 export const crossReferencesSchema = z.object({
-  Produto: z.string(),
+  Produto: z.coerce.string(),
   DescFabricante: z.string(),
-  NumeroProdutoPesq: z.string(),
+  NumeroProdutoPesq: z.coerce.string(),
 })
 
 export type CrossReferencesSchema = z.infer<typeof crossReferencesSchema>

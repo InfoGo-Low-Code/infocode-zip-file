@@ -2,9 +2,9 @@ import { readFile, utils } from 'xlsx'
 import { produtosSchema, ProdutosSchema } from '@/schemas/produtoSchema'
 import { z } from 'zod'
 
-export const produtoResponseSchema = produtosSchema
-  .omit({ Comercializado: true })
-  .extend({ Comercializado: z.string() })
+export const produtoResponseSchema = produtosSchema.extend({
+  Comercializado: z.string(),
+})
 
 export type ProdutoResponseSchema = z.infer<typeof produtoResponseSchema>
 

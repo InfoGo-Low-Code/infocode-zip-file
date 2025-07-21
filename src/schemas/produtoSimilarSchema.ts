@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const produtoSimilarSchema = z.object({
-  Produto: z.string(),
+  Produto: z.coerce.string(),
   CodigoProdutoSimilar: z.string(),
   Descricao: z.string(),
   Comercializado: z.boolean(),
