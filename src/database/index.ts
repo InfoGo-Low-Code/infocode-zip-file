@@ -13,6 +13,7 @@ const dbConfig: SQLConfig = {
     encrypt: true,
     trustServerCertificate: true,
   },
+  requestTimeout: 1000 * 30, // Tempo é em ms, então coloquei essa lógica de conta pois: 1000 ms * 30 = 30000 ms, que equivalem a 30 segundos
 }
 
 let pool: ConnectionPool
