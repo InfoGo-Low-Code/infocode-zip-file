@@ -11,8 +11,6 @@ async function getAmmountAndTruncate(db: ConnectionPool, table: string) {
   )
   const deleted_data = countResult.recordset?.[0]?.total ?? 0
 
-  await db.query(`TRUNCATE TABLE ${table}`)
-
   return deleted_data
 }
 
