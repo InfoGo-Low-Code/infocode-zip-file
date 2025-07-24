@@ -11,6 +11,7 @@ import { getCofapConnection } from '@/database'
 import { readFileSync, unlinkSync } from 'node:fs'
 import { ConnectionPool, Request } from 'mssql'
 import { differenceInMilliseconds } from 'date-fns'
+import { endRoute, startRoute } from '@/utils/routeStage'
 
 const jsonData = z.object({
   racionalizados: z.array(racionalizadosResponseSchema),
@@ -117,6 +118,8 @@ export function dbInsert(app: FastifyZodTypedInstance) {
       },
     },
     async (request, reply) => {
+      startRoute('dbInsert')
+
       const {
         uuid,
         racionalizados_time_in_ms,
@@ -237,6 +240,8 @@ export function dbInsert(app: FastifyZodTypedInstance) {
         return reply.notAcceptable(
           `Erro ao executar comandos INSERT em batch: ${error.message}`,
         )
+      } finally {
+        endRoute('dbInsert')
       }
     },
   )

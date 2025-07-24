@@ -23,6 +23,7 @@ import { CrossReferencesSchema } from '@/schemas/crossReferencesSchema'
 import { randomUUID } from 'node:crypto'
 
 import { differenceInMilliseconds } from 'date-fns'
+import { endRoute, startRoute } from '@/utils/routeStage'
 
 export function zipFile(app: FastifyZodTypedInstance) {
   app.post(
@@ -49,6 +50,8 @@ export function zipFile(app: FastifyZodTypedInstance) {
       },
     },
     async (request, reply) => {
+      startRoute('zipFile')
+
       const { url } = request.body
 
       if (!existsSync('./uploads')) {
@@ -177,6 +180,8 @@ export function zipFile(app: FastifyZodTypedInstance) {
         } else {
           return reply.internalServerError(String(error))
         }
+      } finally {
+        endRoute('zipFile')
       }
     },
   )

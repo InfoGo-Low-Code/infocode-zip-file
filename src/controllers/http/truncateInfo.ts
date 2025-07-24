@@ -4,6 +4,7 @@ import { fastifyErrorResponseSchema } from '@/schemas/errors/fastifyErrorRespons
 import { zodErrorBadRequestResponseSchema } from '@/schemas/errors/zodErrorBadRequestSchema'
 import { getCofapConnection } from '@/database'
 import { ConnectionPool, IResult } from 'mssql'
+import { endRoute, startRoute } from '@/utils/routeStage'
 
 async function getAmmountAndTruncate(db: ConnectionPool, table: string) {
   const countResult: IResult<{ total: number }> = await db.query(
@@ -35,6 +36,8 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
       },
     },
     async (_, reply) => {
+      startRoute('truncateInfo')
+
       const db = await getCofapConnection()
 
       try {
@@ -79,6 +82,8 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
         return reply.notAcceptable(
           `Erro ao executar comandos TRUNCATE: ${error.message}`,
         )
+      } finally {
+        endRoute('truncateInfo')
       }
     },
   )
