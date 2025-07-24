@@ -12,6 +12,7 @@ import { readFileSync, unlinkSync } from 'node:fs'
 import { ConnectionPool, Request } from 'mssql'
 import { differenceInMilliseconds } from 'date-fns'
 import { endRoute, startRoute } from '@/utils/routeStage'
+import { datetimeParserCustom } from '@/utils/datetimeParserCustom'
 
 const jsonData = z.object({
   racionalizados: z.array(racionalizadosResponseSchema),
@@ -53,7 +54,11 @@ async function runBatchInChunks(
   table: string,
   db: ConnectionPool,
   chunkSize = 1000,
-): Promise<{ inserted_data: number; execution_time_ms: number }> {
+): Promise<{
+  inserted_data: number
+  execution_time_ms: number
+  end_date_time: string
+}> {
   const startTime = new Date()
   let inserted_data = 0
   const chunks = Array.from(
@@ -79,7 +84,9 @@ async function runBatchInChunks(
 
   const execution_time_ms = differenceInMilliseconds(new Date(), startTime)
 
-  return { inserted_data, execution_time_ms }
+  const end_date_time = datetimeParserCustom(new Date())
+
+  return { inserted_data, execution_time_ms, end_date_time }
 }
 
 export function dbInsert(app: FastifyZodTypedInstance) {
@@ -111,6 +118,12 @@ export function dbInsert(app: FastifyZodTypedInstance) {
             cross_references_time_in_ms: z.number(),
             inserted_produtos: z.number(),
             produtos_time_in_ms: z.number(),
+            end_date_time_racionalizados: z.string(),
+            end_date_time_comunizados: z.string(),
+            end_date_time_troca_codigo: z.string(),
+            end_date_time_versoes: z.string(),
+            end_date_time_cross_references: z.string(),
+            end_date_time_produtos: z.string(),
           }),
           400: zodErrorBadRequestResponseSchema,
           500: fastifyErrorResponseSchema,
@@ -169,42 +182,53 @@ export function dbInsert(app: FastifyZodTypedInstance) {
         const {
           execution_time_ms: racionalizadosTime,
           inserted_data: inserted_racionalizados,
+          end_date_time: end_date_time_racionalizados,
         } = await runBatchInChunks(
           comandosRacionalizados,
           'RACIONALIZADOS_TESTE',
           db,
         )
+
         const {
           execution_time_ms: comunizadosTime,
           inserted_data: inserted_comunizados,
+          end_date_time: end_date_time_comunizados,
         } = await runBatchInChunks(
           comandosComunizados,
           'COMUNIZADOS_COMUNIZOU_TESTE',
           db,
         )
+
         const {
           execution_time_ms: trocaCodigoTime,
           inserted_data: inserted_troca_codigo,
+          end_date_time: end_date_time_troca_codigo,
         } = await runBatchInChunks(
           comandosTrocaCodigo,
           'TROCA_CODIGO_TESTE',
           db,
         )
+
         const {
           execution_time_ms: versoesTime,
           inserted_data: inserted_versoes,
+          end_date_time: end_date_time_versoes,
         } = await runBatchInChunks(comandosVersoes, 'VERSOES_TESTE', db)
+
         const {
           execution_time_ms: crossReferencesTime,
           inserted_data: inserted_cross_references,
+          end_date_time: end_date_time_cross_references,
         } = await runBatchInChunks(
           comandosCrossReferences,
           'CROSS_REFERENCES_TESTE',
           db,
         )
+
         const {
           execution_time_ms: produtosTime,
           inserted_data: inserted_produtos,
+          end_date_time: end_date_time_produtos,
         } = await runBatchInChunks(comandosProdutos, 'PRODUTOS_TESTE', db)
 
         unlinkSync(filePath)
@@ -232,6 +256,12 @@ export function dbInsert(app: FastifyZodTypedInstance) {
           cross_references_time_in_ms: totalTimeCrossReferences,
           inserted_produtos,
           produtos_time_in_ms: totalTimeProdutos,
+          end_date_time_racionalizados,
+          end_date_time_comunizados,
+          end_date_time_troca_codigo,
+          end_date_time_versoes,
+          end_date_time_cross_references,
+          end_date_time_produtos,
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
