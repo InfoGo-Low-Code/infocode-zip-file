@@ -4,8 +4,8 @@ import { formatInTimeZone } from 'date-fns-tz'
 export function datetimeParserCustom(date: Date) {
   const formattedDate = formatInTimeZone(
     date,
-    'America_Sao_Paulo',
-    'dd/MM/yyyy HH:mm',
+    'America/Sao_Paulo',
+    'dd/MM/yyyy HH:mm:ss',
     {
       locale: ptBR,
     },
