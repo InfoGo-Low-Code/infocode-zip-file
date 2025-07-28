@@ -161,33 +161,29 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
       const comandosRacionalizados: string[] = toSQLInsert(
         racionalizados,
-        'RACIONALIZADOS_TESTE',
+        'RACIONALIZADOS',
       )
       const comandosComunizados: string[] = toSQLInsert(
         comunizados,
-        'COMUNIZADOS_COMUNIZOU_TESTE',
+        'COMUNIZADOS_COMUNIZOU',
       )
       const comandosTrocaCodigo: string[] = toSQLInsert(
         troca_codigo,
-        'TROCA_CODIGO_TESTE',
+        'TROCA_CODIGO',
       )
-      const comandosVersoes: string[] = toSQLInsert(versoes, 'VERSOES_TESTE')
+      const comandosVersoes: string[] = toSQLInsert(versoes, 'VERSOES')
       const comandosCrossReferences: string[] = toSQLInsert(
         cross_references,
-        'CROSS_REFERENCES_TESTE',
+        'CROSS_REFERENCES',
       )
-      const comandosProdutos: string[] = toSQLInsert(produtos, 'PRODUTOS_TESTE')
+      const comandosProdutos: string[] = toSQLInsert(produtos, 'PRODUTOS')
 
       try {
         const {
           execution_time_ms: racionalizadosTime,
           inserted_data: inserted_racionalizados,
           end_date_time: end_date_time_racionalizados,
-        } = await runBatchInChunks(
-          comandosRacionalizados,
-          'RACIONALIZADOS_TESTE',
-          db,
-        )
+        } = await runBatchInChunks(comandosRacionalizados, 'RACIONALIZADOS', db)
 
         const {
           execution_time_ms: comunizadosTime,
@@ -195,7 +191,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           end_date_time: end_date_time_comunizados,
         } = await runBatchInChunks(
           comandosComunizados,
-          'COMUNIZADOS_COMUNIZOU_TESTE',
+          'COMUNIZADOS_COMUNIZOU',
           db,
         )
 
@@ -203,17 +199,13 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           execution_time_ms: trocaCodigoTime,
           inserted_data: inserted_troca_codigo,
           end_date_time: end_date_time_troca_codigo,
-        } = await runBatchInChunks(
-          comandosTrocaCodigo,
-          'TROCA_CODIGO_TESTE',
-          db,
-        )
+        } = await runBatchInChunks(comandosTrocaCodigo, 'TROCA_CODIGO', db)
 
         const {
           execution_time_ms: versoesTime,
           inserted_data: inserted_versoes,
           end_date_time: end_date_time_versoes,
-        } = await runBatchInChunks(comandosVersoes, 'VERSOES_TESTE', db)
+        } = await runBatchInChunks(comandosVersoes, 'VERSOES', db)
 
         const {
           execution_time_ms: crossReferencesTime,
@@ -221,7 +213,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           end_date_time: end_date_time_cross_references,
         } = await runBatchInChunks(
           comandosCrossReferences,
-          'CROSS_REFERENCES_TESTE',
+          'CROSS_REFERENCES',
           db,
         )
 
@@ -229,7 +221,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           execution_time_ms: produtosTime,
           inserted_data: inserted_produtos,
           end_date_time: end_date_time_produtos,
-        } = await runBatchInChunks(comandosProdutos, 'PRODUTOS_TESTE', db)
+        } = await runBatchInChunks(comandosProdutos, 'PRODUTOS', db)
 
         unlinkSync(filePath)
 
