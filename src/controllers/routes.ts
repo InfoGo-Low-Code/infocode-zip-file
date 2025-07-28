@@ -3,10 +3,12 @@ import { dbInsert } from './http/dbInsert'
 import { zipFile } from './http/zipFile'
 import { truncateInfo } from './http/truncateInfo'
 import { verifyRoutes } from './http/verifyRoutes'
+import { dbInsertProduction } from './http/dbInsertProduction'
 
 export function routes(app: FastifyZodTypedInstance) {
   app.register(zipFile)
   app.register(truncateInfo)
   app.register(dbInsert)
   app.register(verifyRoutes)
+  app.register(dbInsertProduction)
 }
