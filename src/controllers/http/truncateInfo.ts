@@ -43,30 +43,27 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
       try {
         const deleted_racionalizados = await getAmmountAndTruncate(
           db,
-          'RACIONALIZADOS_TESTE',
+          'RACIONALIZADOS',
         )
 
         const deleted_comunizados = await getAmmountAndTruncate(
           db,
-          'COMUNIZADOS_COMUNIZOU_TESTE',
+          'COMUNIZADOS_COMUNIZOU',
         )
 
         const deleted_troca_codigo = await getAmmountAndTruncate(
           db,
-          'TROCA_CODIGO_TESTE',
+          'TROCA_CODIGO',
         )
 
-        const deleted_versoes = await getAmmountAndTruncate(db, 'VERSOES_TESTE')
+        const deleted_versoes = await getAmmountAndTruncate(db, 'VERSOES')
 
         const deleted_cross_references = await getAmmountAndTruncate(
           db,
-          'CROSS_REFERENCES_TESTE',
+          'CROSS_REFERENCES',
         )
 
-        const deleted_produtos = await getAmmountAndTruncate(
-          db,
-          'PRODUTOS_TESTE',
-        )
+        const deleted_produtos = await getAmmountAndTruncate(db, 'PRODUTOS')
 
         return reply.send({
           message: 'Registros deletados com sucesso',
