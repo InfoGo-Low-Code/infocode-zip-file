@@ -14,11 +14,36 @@ import { differenceInMilliseconds } from 'date-fns'
 import {
   endRoute,
   getProgress,
+  setUpdateInfo,
   setUserUpdate,
   startRoute,
   updateProgress,
 } from '@/utils/routeStage'
 import { datetimeParserCustom } from '@/utils/datetimeParserCustom'
+
+export const responseInsert = z.object({
+  message: z.string(),
+  inserted_racionalizados: z.number(),
+  racionalizados_time_in_ms: z.number(),
+  inserted_comunizados: z.number(),
+  comunizados_time_in_ms: z.number(),
+  inserted_troca_codigo: z.number(),
+  troca_codigo_time_in_ms: z.number(),
+  inserted_versoes: z.number(),
+  versoes_time_in_ms: z.number(),
+  inserted_cross_references: z.number(),
+  cross_references_time_in_ms: z.number(),
+  inserted_produtos: z.number(),
+  produtos_time_in_ms: z.number(),
+  end_date_time_racionalizados: z.string(),
+  end_date_time_comunizados: z.string(),
+  end_date_time_troca_codigo: z.string(),
+  end_date_time_versoes: z.string(),
+  end_date_time_cross_references: z.string(),
+  end_date_time_produtos: z.string(),
+})
+
+export type ResponseInsert = z.infer<typeof responseInsert>
 
 const jsonData = z.object({
   racionalizados: z.array(racionalizadosResponseSchema),
@@ -110,27 +135,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           produtos_time_in_ms: z.number(),
         }),
         response: {
-          200: z.object({
-            message: z.string(),
-            inserted_racionalizados: z.number(),
-            racionalizados_time_in_ms: z.number(),
-            inserted_comunizados: z.number(),
-            comunizados_time_in_ms: z.number(),
-            inserted_troca_codigo: z.number(),
-            troca_codigo_time_in_ms: z.number(),
-            inserted_versoes: z.number(),
-            versoes_time_in_ms: z.number(),
-            inserted_cross_references: z.number(),
-            cross_references_time_in_ms: z.number(),
-            inserted_produtos: z.number(),
-            produtos_time_in_ms: z.number(),
-            end_date_time_racionalizados: z.string(),
-            end_date_time_comunizados: z.string(),
-            end_date_time_troca_codigo: z.string(),
-            end_date_time_versoes: z.string(),
-            end_date_time_cross_references: z.string(),
-            end_date_time_produtos: z.string(),
-          }),
+          200: responseInsert,
           400: zodErrorBadRequestResponseSchema,
           500: fastifyErrorResponseSchema,
         },
@@ -273,6 +278,28 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
         updateProgress({
           message: 'Processo Finalizado',
           percentage: getProgress().percentage + 5,
+        })
+
+        setUpdateInfo({
+          message: 'Registros inseridos com sucesso',
+          inserted_racionalizados,
+          racionalizados_time_in_ms: totalTimeRacionalizados,
+          inserted_comunizados,
+          comunizados_time_in_ms: totalTimeComunizados,
+          inserted_troca_codigo,
+          troca_codigo_time_in_ms: totalTimeTrocaCodigo,
+          inserted_versoes,
+          versoes_time_in_ms: totalTimeVersoes,
+          inserted_cross_references,
+          cross_references_time_in_ms: totalTimeCrossReferences,
+          inserted_produtos,
+          produtos_time_in_ms: totalTimeProdutos,
+          end_date_time_racionalizados,
+          end_date_time_comunizados,
+          end_date_time_troca_codigo,
+          end_date_time_versoes,
+          end_date_time_cross_references,
+          end_date_time_produtos,
         })
 
         return reply.send({

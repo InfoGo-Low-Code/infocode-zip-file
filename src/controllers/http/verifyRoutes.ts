@@ -2,12 +2,14 @@ import { FastifyZodTypedInstance } from '@/@types/fastifyZodTypedInstance'
 import {
   getActiveRoutes,
   getProgress,
+  getUpdateInfo,
   getUserUpdate,
   isAnyRouteActive,
   progressType,
   routesNames,
 } from '@/utils/routeStage'
 import { z } from 'zod'
+import { responseInsert } from './dbInsertProduction'
 
 export function verifyRoutes(app: FastifyZodTypedInstance) {
   app.get(
@@ -20,6 +22,7 @@ export function verifyRoutes(app: FastifyZodTypedInstance) {
             activeRoutes: z.array(routesNames),
             progress: progressType,
             user: z.string(),
+            updateInfo: responseInsert,
           }),
         },
       },
@@ -30,6 +33,7 @@ export function verifyRoutes(app: FastifyZodTypedInstance) {
         activeRoutes: getActiveRoutes(),
         progress: getProgress(),
         user: getUserUpdate(),
+        updateInfo: getUpdateInfo(),
       })
     },
   )

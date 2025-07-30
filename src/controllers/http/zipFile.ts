@@ -39,6 +39,7 @@ import { differenceInMilliseconds } from 'date-fns'
 import {
   endRoute,
   getProgress,
+  setUpdateInfo,
   setUserUpdate,
   startRoute,
   updateProgress,
@@ -88,6 +89,28 @@ export function zipFile(app: FastifyZodTypedInstance) {
       setUserUpdate(user)
       startRoute('zipFile')
       updateProgress({ message: 'Processo Iniciado', percentage: 0 })
+
+      setUpdateInfo({
+        message: '',
+        inserted_racionalizados: 0,
+        racionalizados_time_in_ms: 0,
+        inserted_comunizados: 0,
+        comunizados_time_in_ms: 0,
+        inserted_troca_codigo: 0,
+        troca_codigo_time_in_ms: 0,
+        inserted_versoes: 0,
+        versoes_time_in_ms: 0,
+        inserted_cross_references: 0,
+        cross_references_time_in_ms: 0,
+        inserted_produtos: 0,
+        produtos_time_in_ms: 0,
+        end_date_time_racionalizados: '',
+        end_date_time_comunizados: '',
+        end_date_time_troca_codigo: '',
+        end_date_time_versoes: '',
+        end_date_time_cross_references: '',
+        end_date_time_produtos: '',
+      })
 
       if (!existsSync('./uploads')) {
         mkdirSync('./uploads', { recursive: true })
