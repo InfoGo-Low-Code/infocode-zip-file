@@ -39,6 +39,7 @@ import { differenceInMilliseconds } from 'date-fns'
 import {
   endRoute,
   getProgress,
+  setUserUpdate,
   startRoute,
   updateProgress,
 } from '@/utils/routeStage'
@@ -64,6 +65,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
       schema: {
         body: z.object({
           url: z.string().url(),
+          user: z.string().email(),
         }),
         response: {
           200: z.object({
@@ -82,10 +84,10 @@ export function zipFile(app: FastifyZodTypedInstance) {
       },
     },
     async (request, reply) => {
+      const { url, user } = request.body
+      setUserUpdate(user)
       startRoute('zipFile')
       updateProgress({ message: 'Processo Iniciado', percentage: 0 })
-
-      const { url } = request.body
 
       if (!existsSync('./uploads')) {
         mkdirSync('./uploads', { recursive: true })
@@ -242,6 +244,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
             ])
           }
         } catch (error) {
+          setUserUpdate('')
           updateProgress({ message: 'Processo em Repouso', percentage: 0 })
 
           if (error instanceof ZodError) {
@@ -362,6 +365,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           return reply.internalServerError(String(error))
         }
       } finally {
+        setUserUpdate('')
         endRoute('zipFile')
       }
     },

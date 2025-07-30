@@ -11,9 +11,19 @@ export const progressType = z.object({
 
 type Progress = z.infer<typeof progressType>
 
+let user = ''
+
 const activeRoutes = new Set<RoutesNames>()
 
 let progress: Progress = { message: 'Processo em Repouso', percentage: 0 }
+
+export function setUserUpdate(userEmail: string) {
+  user = userEmail
+}
+
+export function getUserUpdate(): string {
+  return user
+}
 
 export function startRoute(routeName: RoutesNames) {
   activeRoutes.add(routeName)

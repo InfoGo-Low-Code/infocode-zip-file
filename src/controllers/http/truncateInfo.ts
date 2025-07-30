@@ -7,6 +7,7 @@ import { ConnectionPool, IResult } from 'mssql'
 import {
   endRoute,
   getProgress,
+  setUserUpdate,
   startRoute,
   updateProgress,
 } from '@/utils/routeStage'
@@ -111,6 +112,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
           `Erro ao executar comandos TRUNCATE: ${error.message}`,
         )
       } finally {
+        setUserUpdate('')
         endRoute('truncateInfo')
       }
     },
