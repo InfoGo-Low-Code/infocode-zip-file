@@ -108,11 +108,11 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
+        setUserUpdate('')
         return reply.internalServerError(
           `Erro ao executar comandos TRUNCATE: ${error.message}`,
         )
       } finally {
-        setUserUpdate('')
         endRoute('truncateInfo')
       }
     },

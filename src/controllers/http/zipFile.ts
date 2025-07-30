@@ -334,6 +334,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
             produtosValidation.parse(produto)
           })
         } catch (error) {
+          setUserUpdate('')
           if (error instanceof ZodError) {
             const { errors } = error
 
@@ -375,6 +376,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           produtos_time_in_ms,
         })
       } catch (error) {
+        setUserUpdate('')
         updateProgress({ message: 'Processo em Repouso', percentage: 0 })
 
         if (error instanceof ZodError) {
@@ -388,7 +390,6 @@ export function zipFile(app: FastifyZodTypedInstance) {
           return reply.internalServerError(String(error))
         }
       } finally {
-        setUserUpdate('')
         endRoute('zipFile')
       }
     },

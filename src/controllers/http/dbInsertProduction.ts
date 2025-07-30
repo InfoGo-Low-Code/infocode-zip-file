@@ -325,13 +325,13 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
+        setUserUpdate('')
         unlinkSync(filePath)
 
         return reply.internalServerError(
           `Erro ao executar comandos INSERT em batch: ${error.message}`,
         )
       } finally {
-        setUserUpdate('')
         endRoute('dbInsert')
       }
     },
