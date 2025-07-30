@@ -4,6 +4,7 @@ import { zipFile } from './http/zipFile'
 import { truncateInfo } from './http/truncateInfo'
 import { verifyRoutes } from './http/verifyRoutes'
 import { dbInsertProduction } from './http/dbInsertProduction'
+import { clearInfoData } from './http/clearInfoData'
 
 export function routes(app: FastifyZodTypedInstance) {
   app.register(zipFile)
@@ -11,4 +12,5 @@ export function routes(app: FastifyZodTypedInstance) {
   app.register(dbInsert)
   app.register(verifyRoutes)
   app.register(dbInsertProduction)
+  app.register(clearInfoData)
 }
