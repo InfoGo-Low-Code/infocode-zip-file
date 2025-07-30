@@ -1,4 +1,4 @@
-import { z, ZodError } from 'zod'
+import { z, ZodError, ZodIssueCode } from 'zod'
 import { FastifyZodTypedInstance } from '@/@types/fastifyZodTypedInstance'
 import { fastifyErrorResponseSchema } from '@/schemas/errors/fastifyErrorResponseSchema'
 
@@ -42,6 +42,11 @@ import {
   startRoute,
   updateProgress,
 } from '@/utils/routeStage'
+import { racionalizadosValidation } from '@/schemas/validation/racionalizadosValidation'
+import { comunizadosValidation } from '@/schemas/validation/comunizadosValidation'
+import { produtoSimilarValidation } from '@/schemas/validation/produtoSimilarValidation'
+import { crossReferencesValidation } from '@/schemas/validation/crossReferencesValidation'
+import { produtosValidation } from '@/schemas/validation/produtosValidation'
 
 const jsonData = z.object({
   racionalizados: z.array(racionalizadosResponseSchema),
@@ -85,6 +90,9 @@ export function zipFile(app: FastifyZodTypedInstance) {
       if (!existsSync('./uploads')) {
         mkdirSync('./uploads', { recursive: true })
       }
+
+      let index = 0
+      let arquivo = ''
 
       try {
         const { data } = await app.axios.get(url, {
@@ -195,50 +203,58 @@ export function zipFile(app: FastifyZodTypedInstance) {
 
         unlinkSync(filePath)
 
-        const filenameJson = randomUUID()
-        const jsonOutputPath = `./uploads/${filenameJson}.json`
-
         try {
-          const jsonDataToParse = {
-            racionalizados,
-            comunizados,
-            troca_codigo,
-            versoes,
-            cross_references,
-            produtos,
+          const path: string[] = []
+
+          if (racionalizados.length < 1) {
+            path.push('Racionalizados')
           }
 
-          writeFileSync(
-            jsonOutputPath,
-            JSON.stringify(jsonDataToParse, null, 2),
-            'utf-8',
-          )
+          if (comunizados.length < 1) {
+            path.push('Comunizados')
+          }
 
-          const jsonContent = readFileSync(jsonOutputPath, 'utf-8')
-          const json = JSON.parse(jsonContent)
+          if (troca_codigo.length < 1) {
+            path.push('Troca de Códigos')
+          }
 
-          jsonData.parse(json)
+          if (versoes.length < 1) {
+            path.push('Versões')
+          }
 
-          return reply.send({
-            message: 'Arquivo processado',
-            uuid: filenameJson,
-            racionalizados_time_in_ms,
-            comunizados_time_in_ms,
-            troca_codigo_time_in_ms,
-            versoes_time_in_ms,
-            cross_references_time_in_ms,
-            produtos_time_in_ms,
-          })
+          if (cross_references.length < 1) {
+            path.push('Cross References')
+          }
+
+          if (produtos.length < 1) {
+            path.push('Produtos')
+          }
+
+          if (path.length > 0) {
+            throw new ZodError([
+              {
+                code: ZodIssueCode.invalid_type,
+                expected: 'array',
+                received: 'undefined',
+                message: `Arquivos: ${path.join(', ')} não encontrado(s)`,
+                path,
+              },
+            ])
+          }
         } catch (error) {
-          unlinkSync(jsonOutputPath)
           updateProgress({ message: 'Processo em Repouso', percentage: 0 })
+
           if (error instanceof ZodError) {
             const { errors } = error
 
             const arrayPath: string[] = []
 
             errors.forEach((error) => {
-              arrayPath.push(error.path.toLocaleString())
+              if (error.path.length > 1) {
+                arrayPath.push(error.path.join(', '))
+              } else {
+                arrayPath.push(error.path.toString())
+              }
             })
 
             const path = arrayPath.join(', ')
@@ -246,16 +262,120 @@ export function zipFile(app: FastifyZodTypedInstance) {
             return reply.badRequest(
               `Erro ao fazer leitura de Arquivo. Faltando Arquivos: ${path}`,
             )
-          } else {
-            return reply.internalServerError('Erro Interno de Servidor')
           }
         }
+
+        const jsonDataToParse = {
+          racionalizados,
+          comunizados,
+          troca_codigo,
+          versoes,
+          cross_references,
+          produtos,
+        }
+
+        const filenameJson = randomUUID()
+        const jsonOutputPath = `./uploads/${filenameJson}.json`
+
+        writeFileSync(
+          jsonOutputPath,
+          JSON.stringify(jsonDataToParse, null, 2),
+          'utf-8',
+        )
+
+        try {
+          racionalizados.forEach((racionalizado, idx) => {
+            index = idx + 2
+            arquivo = 'Racionalizados'
+
+            racionalizadosValidation.parse(racionalizado)
+          })
+
+          comunizados.forEach((comunizado, idx) => {
+            index = idx + 2
+            arquivo = 'Comunizados'
+
+            comunizadosValidation.parse(comunizado)
+          })
+
+          troca_codigo.forEach((troca, idx) => {
+            index = idx + 2
+            arquivo = 'Troca de Códigos'
+
+            produtoSimilarValidation.parse(troca)
+          })
+
+          versoes.forEach((versao, idx) => {
+            index = idx + 2
+            arquivo = 'Versões'
+
+            produtoSimilarValidation.parse(versao)
+          })
+
+          cross_references.forEach((cross, idx) => {
+            index = idx + 2
+            arquivo = 'Cross References'
+
+            crossReferencesValidation.parse(cross)
+          })
+
+          produtos.forEach((produto, idx) => {
+            index = idx + 2
+            arquivo = 'Produtos'
+
+            produtosValidation.parse(produto)
+          })
+        } catch (error) {
+          if (error instanceof ZodError) {
+            const { errors } = error
+
+            throw new ZodError(errors)
+          }
+        }
+
+        // const jsonDataToParse = {
+        //   racionalizados,
+        //   comunizados,
+        //   troca_codigo,
+        //   versoes,
+        //   cross_references,
+        //   produtos,
+        // }
+
+        // const filenameJson = randomUUID()
+        // const jsonOutputPath = `./uploads/${filenameJson}.json`
+
+        // writeFileSync(
+        //   jsonOutputPath,
+        //   JSON.stringify(jsonDataToParse, null, 2),
+        //   'utf-8',
+        // )
+
+        const jsonContent = readFileSync(jsonOutputPath, 'utf-8')
+        const json = JSON.parse(jsonContent)
+
+        jsonData.parse(json)
+
+        return reply.send({
+          message: 'Arquivo processado',
+          uuid: filenameJson,
+          racionalizados_time_in_ms,
+          comunizados_time_in_ms,
+          troca_codigo_time_in_ms,
+          versoes_time_in_ms,
+          cross_references_time_in_ms,
+          produtos_time_in_ms,
+        })
       } catch (error) {
-        console.warn(error)
         updateProgress({ message: 'Processo em Repouso', percentage: 0 })
 
         if (error instanceof ZodError) {
-          return reply.badRequest('Validação de campos falhou')
+          console.error(error)
+          const { errors } = error
+
+          return reply.badRequest(
+            `Validação de campos falhou! Arquivo: ${arquivo}, Linha do Excel: ${index}, Erro: ${errors[0].message}`,
+          )
         } else {
           return reply.internalServerError(String(error))
         }

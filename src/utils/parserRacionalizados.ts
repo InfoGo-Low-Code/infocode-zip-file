@@ -6,7 +6,7 @@ import {
 import { z } from 'zod'
 
 export const racionalizadosResponseSchema = racionalizadosSchema.extend({
-  Comercializado: z.string(),
+  Comercializado: z.string().optional(),
 })
 
 export type RacionalizadosResponseSchema = z.infer<
@@ -26,8 +26,17 @@ export function parserRacionalizados(
   })
 
   const produtos: RacionalizadosResponseSchema[] = dataXlsx.map((produto) => ({
-    ...produto,
-    Comercializado: produto.Comercializado ? 'VERDADEIRO' : 'FALSO',
+    Produto: produto.Produto ? String(produto.Produto) : undefined,
+    CodigoProduto: produto.CodigoProduto
+      ? String(produto.CodigoProduto)
+      : undefined,
+    Descricao: produto.Descricao ? String(produto.Descricao) : undefined,
+    Comercializado:
+      produto.Comercializado === true
+        ? 'VERDADEIRO'
+        : produto.Comercializado === false
+          ? 'FALSO'
+          : produto.Comercializado,
   }))
 
   return produtos

@@ -13,5 +13,15 @@ export function parserCrossReferences(
     range: 1,
   })
 
-  return dataXlsx
+  const produtos: CrossReferencesSchema[] = dataXlsx.map((produto) => ({
+    Produto: produto.Produto ? String(produto.Produto) : undefined,
+    DescFabricante: produto.DescFabricante
+      ? String(produto.DescFabricante)
+      : undefined,
+    NumeroProdutoPesq: produto.NumeroProdutoPesq
+      ? String(produto.NumeroProdutoPesq)
+      : undefined,
+  }))
+
+  return produtos
 }

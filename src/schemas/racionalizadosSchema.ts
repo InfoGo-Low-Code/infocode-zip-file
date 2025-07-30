@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
 export const racionalizadosSchema = z.object({
-  Produto: z.coerce.string(),
-  CodigoProduto: z.string(),
-  Descricao: z.string(),
-  Comercializado: z.boolean(),
+  Produto: z.string().optional(),
+  CodigoProduto: z.string().optional(),
+  Descricao: z.string().optional(),
+  Comercializado: z.boolean().optional(),
 })
 
 export type RacionalizadosSchema = z.infer<typeof racionalizadosSchema>

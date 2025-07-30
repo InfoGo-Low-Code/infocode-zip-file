@@ -6,7 +6,7 @@ import { readFile, utils } from 'xlsx'
 import { z } from 'zod'
 
 export const produtoSimilarResponseSchema = produtoSimilarSchema.extend({
-  Comercializado: z.string(),
+  Comercializado: z.string().optional(),
 })
 
 export type ProdutoSimilarResponseSchema = z.infer<
@@ -26,8 +26,17 @@ export function parserProdutoSimilar(
   })
 
   const produtos: ProdutoSimilarResponseSchema[] = dataXlsx.map((produto) => ({
-    ...produto,
-    Comercializado: produto.Comercializado ? 'VERDADEIRO' : 'FALSO',
+    Produto: produto.Produto ? String(produto.Produto) : undefined,
+    CodigoProdutoSimilar: produto.CodigoProdutoSimilar
+      ? String(produto.CodigoProdutoSimilar)
+      : undefined,
+    Descricao: produto.Descricao ? String(produto.Descricao) : undefined,
+    Comercializado:
+      produto.Comercializado === true
+        ? 'VERDADEIRO'
+        : produto.Comercializado === false
+          ? 'FALSO'
+          : produto.Comercializado,
   }))
 
   return produtos
