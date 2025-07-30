@@ -38,6 +38,12 @@ let responseInsert: ResponseInsert = {
   end_date_time_versoes: '',
   end_date_time_cross_references: '',
   end_date_time_produtos: '',
+  deleted_racionalizados: 0,
+  deleted_comunizados: 0,
+  deleted_troca_codigo: 0,
+  deleted_versoes: 0,
+  deleted_cross_references: 0,
+  deleted_produtos: 0,
 }
 
 export function setUserUpdate(userEmail: string) {

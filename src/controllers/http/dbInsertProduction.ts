@@ -41,6 +41,12 @@ export const responseInsert = z.object({
   end_date_time_versoes: z.string(),
   end_date_time_cross_references: z.string(),
   end_date_time_produtos: z.string(),
+  deleted_racionalizados: z.number(),
+  deleted_comunizados: z.number(),
+  deleted_troca_codigo: z.number(),
+  deleted_versoes: z.number(),
+  deleted_cross_references: z.number(),
+  deleted_produtos: z.number(),
 })
 
 export type ResponseInsert = z.infer<typeof responseInsert>
@@ -133,6 +139,12 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           versoes_time_in_ms: z.number(),
           cross_references_time_in_ms: z.number(),
           produtos_time_in_ms: z.number(),
+          deleted_racionalizados: z.number(),
+          deleted_comunizados: z.number(),
+          deleted_troca_codigo: z.number(),
+          deleted_versoes: z.number(),
+          deleted_cross_references: z.number(),
+          deleted_produtos: z.number(),
         }),
         response: {
           200: responseInsert,
@@ -152,6 +164,12 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
         versoes_time_in_ms,
         cross_references_time_in_ms,
         produtos_time_in_ms,
+        deleted_racionalizados,
+        deleted_comunizados,
+        deleted_troca_codigo,
+        deleted_versoes,
+        deleted_cross_references,
+        deleted_produtos,
       } = request.body
 
       const db = await getCofapConnection()
@@ -300,6 +318,12 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           end_date_time_versoes,
           end_date_time_cross_references,
           end_date_time_produtos,
+          deleted_racionalizados,
+          deleted_comunizados,
+          deleted_troca_codigo,
+          deleted_versoes,
+          deleted_cross_references,
+          deleted_produtos,
         })
 
         return reply.send({
@@ -322,6 +346,12 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           end_date_time_versoes,
           end_date_time_cross_references,
           end_date_time_produtos,
+          deleted_racionalizados,
+          deleted_comunizados,
+          deleted_troca_codigo,
+          deleted_versoes,
+          deleted_cross_references,
+          deleted_produtos,
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
