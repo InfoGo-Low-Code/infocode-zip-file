@@ -265,24 +265,6 @@ export function zipFile(app: FastifyZodTypedInstance) {
           }
         }
 
-        const jsonDataToParse = {
-          racionalizados,
-          comunizados,
-          troca_codigo,
-          versoes,
-          cross_references,
-          produtos,
-        }
-
-        const filenameJson = randomUUID()
-        const jsonOutputPath = `./uploads/${filenameJson}.json`
-
-        writeFileSync(
-          jsonOutputPath,
-          JSON.stringify(jsonDataToParse, null, 2),
-          'utf-8',
-        )
-
         try {
           racionalizados.forEach((racionalizado, idx) => {
             index = idx + 2
@@ -333,23 +315,23 @@ export function zipFile(app: FastifyZodTypedInstance) {
           }
         }
 
-        // const jsonDataToParse = {
-        //   racionalizados,
-        //   comunizados,
-        //   troca_codigo,
-        //   versoes,
-        //   cross_references,
-        //   produtos,
-        // }
+        const jsonDataToParse = {
+          racionalizados,
+          comunizados,
+          troca_codigo,
+          versoes,
+          cross_references,
+          produtos,
+        }
 
-        // const filenameJson = randomUUID()
-        // const jsonOutputPath = `./uploads/${filenameJson}.json`
+        const filenameJson = randomUUID()
+        const jsonOutputPath = `./uploads/${filenameJson}.json`
 
-        // writeFileSync(
-        //   jsonOutputPath,
-        //   JSON.stringify(jsonDataToParse, null, 2),
-        //   'utf-8',
-        // )
+        writeFileSync(
+          jsonOutputPath,
+          JSON.stringify(jsonDataToParse, null, 2),
+          'utf-8',
+        )
 
         const jsonContent = readFileSync(jsonOutputPath, 'utf-8')
         const json = JSON.parse(jsonContent)
