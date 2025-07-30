@@ -1,7 +1,9 @@
 import { FastifyZodTypedInstance } from '@/@types/fastifyZodTypedInstance'
 import {
   getActiveRoutes,
+  getProgress,
   isAnyRouteActive,
+  progressType,
   routesNames,
 } from '@/utils/routeStage'
 import { z } from 'zod'
@@ -15,6 +17,7 @@ export function verifyRoutes(app: FastifyZodTypedInstance) {
           200: z.object({
             inUse: z.boolean(),
             activeRoutes: z.array(routesNames),
+            progress: progressType,
           }),
         },
       },
@@ -23,6 +26,7 @@ export function verifyRoutes(app: FastifyZodTypedInstance) {
       return reply.send({
         inUse: isAnyRouteActive(),
         activeRoutes: getActiveRoutes(),
+        progress: getProgress(),
       })
     },
   )

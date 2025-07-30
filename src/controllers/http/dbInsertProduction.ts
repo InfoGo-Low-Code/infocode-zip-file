@@ -11,7 +11,12 @@ import { getCofapConnection } from '@/database'
 import { readFileSync, unlinkSync } from 'node:fs'
 import { ConnectionPool, Request } from 'mssql'
 import { differenceInMilliseconds } from 'date-fns'
-import { endRoute, startRoute } from '@/utils/routeStage'
+import {
+  endRoute,
+  getProgress,
+  startRoute,
+  updateProgress,
+} from '@/utils/routeStage'
 import { datetimeParserCustom } from '@/utils/datetimeParserCustom'
 
 const jsonData = z.object({
@@ -179,11 +184,21 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
       const comandosProdutos: string[] = toSQLInsert(produtos, 'PRODUTOS')
 
       try {
+        updateProgress({
+          message: 'Inserindo novos registros Racionalizados',
+          percentage: getProgress().percentage + 5,
+        })
+
         const {
           execution_time_ms: racionalizadosTime,
           inserted_data: inserted_racionalizados,
           end_date_time: end_date_time_racionalizados,
         } = await runBatchInChunks(comandosRacionalizados, 'RACIONALIZADOS', db)
+
+        updateProgress({
+          message: 'Inserindo novos registros Comunizados',
+          percentage: getProgress().percentage + 5,
+        })
 
         const {
           execution_time_ms: comunizadosTime,
@@ -195,17 +210,32 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           db,
         )
 
+        updateProgress({
+          message: 'Inserindo novos registros de Troca de Códigos',
+          percentage: getProgress().percentage + 5,
+        })
+
         const {
           execution_time_ms: trocaCodigoTime,
           inserted_data: inserted_troca_codigo,
           end_date_time: end_date_time_troca_codigo,
         } = await runBatchInChunks(comandosTrocaCodigo, 'TROCA_CODIGO', db)
 
+        updateProgress({
+          message: 'Inserindo novos registros de Versões',
+          percentage: getProgress().percentage + 5,
+        })
+
         const {
           execution_time_ms: versoesTime,
           inserted_data: inserted_versoes,
           end_date_time: end_date_time_versoes,
         } = await runBatchInChunks(comandosVersoes, 'VERSOES', db)
+
+        updateProgress({
+          message: 'Inserindo novos registros de Cross References',
+          percentage: getProgress().percentage + 5,
+        })
 
         const {
           execution_time_ms: crossReferencesTime,
@@ -216,6 +246,11 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           'CROSS_REFERENCES',
           db,
         )
+
+        updateProgress({
+          message: 'Inserindo novos registros de Produtos',
+          percentage: getProgress().percentage + 5,
+        })
 
         const {
           execution_time_ms: produtosTime,
@@ -233,6 +268,11 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
         const totalTimeCrossReferences =
           crossReferencesTime + cross_references_time_in_ms
         const totalTimeProdutos = produtosTime + produtos_time_in_ms
+
+        updateProgress({
+          message: 'Processo Finalizado',
+          percentage: getProgress().percentage + 5,
+        })
 
         return reply.send({
           message: 'Registros inseridos com sucesso',
@@ -259,7 +299,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
       } catch (error: any) {
         unlinkSync(filePath)
 
-        return reply.notAcceptable(
+        return reply.internalServerError(
           `Erro ao executar comandos INSERT em batch: ${error.message}`,
         )
       } finally {
