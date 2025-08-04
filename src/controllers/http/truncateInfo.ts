@@ -32,6 +32,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
           200: z.object({
             message: z.string(),
             deleted_racionalizados: z.number(),
+            deleted_relatorio_comunizados: z.number(),
             deleted_comunizados: z.number(),
             deleted_troca_codigo: z.number(),
             deleted_versoes: z.number(),
@@ -56,6 +57,15 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
         const deleted_racionalizados = await getAmmountAndTruncate(
           db,
           'RACIONALIZADOS',
+        )
+
+        updateProgress({
+          message: 'Deletando registros do Relatório de Comunizados',
+          percentage: getProgress().percentage + 5,
+        })
+        const deleted_relatorio_comunizados = await getAmmountAndTruncate(
+          db,
+          'RELATORIO_COMUNIZADOS',
         )
 
         updateProgress({
@@ -100,6 +110,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
         return reply.send({
           message: 'Registros deletados com sucesso',
           deleted_racionalizados,
+          deleted_relatorio_comunizados,
           deleted_comunizados,
           deleted_troca_codigo,
           deleted_versoes,
