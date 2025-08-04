@@ -3,6 +3,7 @@ import {
   getActiveRoutes,
   getProgress,
   getUpdateInfo,
+  getUserFinished,
   getUserUpdate,
   isAnyRouteActive,
   progressType,
@@ -22,6 +23,7 @@ export function verifyRoutes(app: FastifyZodTypedInstance) {
             activeRoutes: z.array(routesNames),
             progress: progressType,
             user: z.string(),
+            userFinished: z.string(),
             updateInfo: responseInsert,
           }),
         },
@@ -33,6 +35,7 @@ export function verifyRoutes(app: FastifyZodTypedInstance) {
         activeRoutes: getActiveRoutes(),
         progress: getProgress(),
         user: getUserUpdate(),
+        userFinished: getUserFinished(),
         updateInfo: getUpdateInfo(),
       })
     },

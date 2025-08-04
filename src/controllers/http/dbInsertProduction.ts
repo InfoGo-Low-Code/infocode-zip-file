@@ -15,6 +15,8 @@ import {
   endRoute,
   getProgress,
   setUpdateInfo,
+  setUserFinished,
+  setUserUpdate,
   startRoute,
   updateProgress,
 } from '@/utils/routeStage'
@@ -144,6 +146,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           deleted_versoes: z.number(),
           deleted_cross_references: z.number(),
           deleted_produtos: z.number(),
+          user: z.string().email(),
         }),
         response: {
           200: responseInsert,
@@ -169,6 +172,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
         deleted_versoes,
         deleted_cross_references,
         deleted_produtos,
+        user,
       } = request.body
 
       const db = await getCofapConnection()
@@ -360,6 +364,8 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           `Erro ao executar comandos INSERT em batch: ${error.message}`,
         )
       } finally {
+        setUserUpdate('')
+        setUserFinished(user)
         endRoute('dbInsert')
       }
     },

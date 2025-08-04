@@ -71,6 +71,7 @@ export function fullProcess(app: FastifyZodTypedInstance) {
           deleted_versoes: truncateData.deleted_versoes,
           deleted_cross_references: truncateData.deleted_cross_references,
           deleted_produtos: truncateData.deleted_produtos,
+          user: zipData.user,
         },
       })
 

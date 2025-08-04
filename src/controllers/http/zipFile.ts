@@ -78,6 +78,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
             versoes_time_in_ms: z.number(),
             cross_references_time_in_ms: z.number(),
             produtos_time_in_ms: z.number(),
+            user: z.string(),
           }),
           400: fastifyErrorResponseSchema,
           500: fastifyErrorResponseSchema,
@@ -380,6 +381,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           versoes_time_in_ms,
           cross_references_time_in_ms,
           produtos_time_in_ms,
+          user,
         })
       } catch (error) {
         setUserUpdate('')

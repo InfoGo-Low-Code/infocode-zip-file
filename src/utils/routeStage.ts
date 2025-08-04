@@ -13,6 +13,7 @@ export const progressType = z.object({
 type Progress = z.infer<typeof progressType>
 
 let user = ''
+let userFinished = ''
 
 const activeRoutes = new Set<RoutesNames>()
 
@@ -44,6 +45,14 @@ let responseInsert: ResponseInsert = {
   deleted_versoes: 0,
   deleted_cross_references: 0,
   deleted_produtos: 0,
+}
+
+export function setUserFinished(userEmail: string) {
+  userFinished = userEmail
+}
+
+export function getUserFinished(): string {
+  return userFinished
 }
 
 export function setUserUpdate(userEmail: string) {
