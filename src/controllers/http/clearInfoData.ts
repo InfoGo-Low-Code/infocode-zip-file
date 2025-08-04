@@ -1,6 +1,7 @@
 import { FastifyZodTypedInstance } from '@/@types/fastifyZodTypedInstance'
 import {
   setUpdateInfo,
+  setUserFinished,
   setUserUpdate,
   updateProgress,
 } from '@/utils/routeStage'
@@ -20,6 +21,7 @@ export function clearInfoData(app: FastifyZodTypedInstance) {
     },
     async (_, reply) => {
       setUserUpdate('')
+      setUserFinished('')
       setUpdateInfo({
         message: '',
         inserted_racionalizados: 0,
