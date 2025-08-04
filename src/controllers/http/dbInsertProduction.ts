@@ -15,7 +15,6 @@ import {
   endRoute,
   getProgress,
   setUpdateInfo,
-  setUserUpdate,
   startRoute,
   updateProgress,
 } from '@/utils/routeStage'
@@ -361,7 +360,6 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
           `Erro ao executar comandos INSERT em batch: ${error.message}`,
         )
       } finally {
-        setUserUpdate('')
         endRoute('dbInsert')
       }
     },
