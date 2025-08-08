@@ -60,12 +60,16 @@ export function fullProcess(app: FastifyZodTypedInstance) {
         payload: {
           uuid: zipData.uuid,
           racionalizados_time_in_ms: zipData.racionalizados_time_in_ms,
+          relatorio_comunizados_time_in_ms:
+            zipData.relatorio_comunizados_time_in_ms,
           comunizados_time_in_ms: zipData.comunizados_time_in_ms,
           troca_codigo_time_in_ms: zipData.troca_codigo_time_in_ms,
           versoes_time_in_ms: zipData.versoes_time_in_ms,
           cross_references_time_in_ms: zipData.cross_references_time_in_ms,
           produtos_time_in_ms: zipData.produtos_time_in_ms,
           deleted_racionalizados: truncateData.deleted_racionalizados,
+          deleted_relatorio_comunizados:
+            truncateData.deleted_relatorio_comunizados,
           deleted_comunizados: truncateData.deleted_comunizados,
           deleted_troca_codigo: truncateData.deleted_troca_codigo,
           deleted_versoes: truncateData.deleted_versoes,

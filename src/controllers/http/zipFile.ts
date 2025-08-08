@@ -49,6 +49,11 @@ import { comunizadosValidation } from '@/schemas/validation/comunizadosValidatio
 import { produtoSimilarValidation } from '@/schemas/validation/produtoSimilarValidation'
 import { crossReferencesValidation } from '@/schemas/validation/crossReferencesValidation'
 import { produtosValidation } from '@/schemas/validation/produtosValidation'
+import { relatorioComunizadosValidation } from '@/schemas/validation/relatorioComunizadosValidation'
+import {
+  parserRelatorioComunizados,
+  RelatorioComunizadosResponseSchema,
+} from '@/utils/parserRelatorioComunizados'
 
 const jsonData = z.object({
   racionalizados: z.array(racionalizadosResponseSchema),
@@ -73,6 +78,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
             message: z.string(),
             uuid: z.string(),
             racionalizados_time_in_ms: z.number(),
+            relatorio_comunizados_time_in_ms: z.number(),
             comunizados_time_in_ms: z.number(),
             troca_codigo_time_in_ms: z.number(),
             versoes_time_in_ms: z.number(),
@@ -95,6 +101,8 @@ export function zipFile(app: FastifyZodTypedInstance) {
         message: '',
         inserted_racionalizados: 0,
         racionalizados_time_in_ms: 0,
+        inserted_relatorio_comunizados: 0,
+        relatorio_comunizados_time_in_ms: 0,
         inserted_comunizados: 0,
         comunizados_time_in_ms: 0,
         inserted_troca_codigo: 0,
@@ -106,12 +114,14 @@ export function zipFile(app: FastifyZodTypedInstance) {
         inserted_produtos: 0,
         produtos_time_in_ms: 0,
         end_date_time_racionalizados: '',
+        end_date_time_relatorio_comunizados: '',
         end_date_time_comunizados: '',
         end_date_time_troca_codigo: '',
         end_date_time_versoes: '',
         end_date_time_cross_references: '',
         end_date_time_produtos: '',
         deleted_racionalizados: 0,
+        deleted_relatorio_comunizados: 0,
         deleted_comunizados: 0,
         deleted_troca_codigo: 0,
         deleted_versoes: 0,
@@ -144,6 +154,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
         const zipEntries = zip.getEntries()
 
         const racionalizados: RacionalizadosResponseSchema[] = []
+        const relatorioComunizados: RelatorioComunizadosResponseSchema[] = []
         const comunizados: ProdutoSimilarResponseSchema[] = []
         const troca_codigo: ProdutoSimilarResponseSchema[] = []
         const versoes: ProdutoSimilarResponseSchema[] = []
@@ -152,6 +163,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
 
         let racionalizados_time_in_ms: number = 0
         let comunizados_time_in_ms: number = 0
+        let relatorio_comunizados_time_in_ms: number = 0
         let troca_codigo_time_in_ms: number = 0
         let versoes_time_in_ms: number = 0
         let cross_references_time_in_ms: number = 0
@@ -198,6 +210,18 @@ export function zipFile(app: FastifyZodTypedInstance) {
             })
             produtos.push(...parserProdutos(tempFilePath))
             produtos_time_in_ms = differenceInMilliseconds(
+              new Date(),
+              startTime,
+            )
+          } else if (filenameWithoutExt.includes('RCOM')) {
+            updateProgress({
+              message: 'Lendo Arquivo de Relatório de Comunizados',
+              percentage: getProgress().percentage + 5,
+            })
+            relatorioComunizados.push(
+              ...parserRelatorioComunizados(tempFilePath),
+            )
+            relatorio_comunizados_time_in_ms = differenceInMilliseconds(
               new Date(),
               startTime,
             )
@@ -262,6 +286,10 @@ export function zipFile(app: FastifyZodTypedInstance) {
             path.push('Produtos')
           }
 
+          if (relatorioComunizados.length < 1) {
+            path.push('Relatório Comunizados')
+          }
+
           if (path.length > 0) {
             throw new ZodError([
               {
@@ -304,6 +332,13 @@ export function zipFile(app: FastifyZodTypedInstance) {
             arquivo = 'Racionalizados'
 
             racionalizadosValidation.parse(racionalizado)
+          })
+
+          relatorioComunizados.forEach((comunizado, idx) => {
+            index = idx + 2
+            arquivo = 'Relatório de Comunizados'
+
+            relatorioComunizadosValidation.parse(comunizado)
           })
 
           comunizados.forEach((comunizado, idx) => {
@@ -351,6 +386,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
 
         const jsonDataToParse = {
           racionalizados,
+          relatorioComunizados,
           comunizados,
           troca_codigo,
           versoes,
@@ -376,6 +412,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           message: 'Arquivo processado',
           uuid: filenameJson,
           racionalizados_time_in_ms,
+          relatorio_comunizados_time_in_ms,
           comunizados_time_in_ms,
           troca_codigo_time_in_ms,
           versoes_time_in_ms,
