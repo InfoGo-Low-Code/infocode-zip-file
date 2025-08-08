@@ -147,7 +147,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Arquivo ZIP Inserido em Sistema',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const zip = new AdmZip(filePath)
@@ -186,7 +186,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           if (filenameWithoutExt.includes('RAC')) {
             updateProgress({
               message: 'Lendo Arquivo de Racionalizados',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             racionalizados.push(...parserRacionalizados(tempFilePath))
             racionalizados_time_in_ms = differenceInMilliseconds(
@@ -196,7 +196,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           } else if (filenameWithoutExt.includes('CROSS')) {
             updateProgress({
               message: 'Lendo Arquivo de Cross References',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             cross_references.push(...parserCrossReferences(tempFilePath))
             cross_references_time_in_ms = differenceInMilliseconds(
@@ -206,7 +206,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           } else if (filenameWithoutExt.includes('PRODUTOS')) {
             updateProgress({
               message: 'Lendo Arquivo de Produtos',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             produtos.push(...parserProdutos(tempFilePath))
             produtos_time_in_ms = differenceInMilliseconds(
@@ -216,7 +216,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           } else if (filenameWithoutExt.includes('RCOM')) {
             updateProgress({
               message: 'Lendo Arquivo de Relatório de Comunizados',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             relatorioComunizados.push(
               ...parserRelatorioComunizados(tempFilePath),
@@ -228,7 +228,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           } else if (filenameWithoutExt.includes('COM')) {
             updateProgress({
               message: 'Lendo Arquivo de Comunizados',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             comunizados.push(...parserProdutoSimilar(tempFilePath))
             comunizados_time_in_ms = differenceInMilliseconds(
@@ -238,7 +238,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           } else if (filenameWithoutExt.includes('TROCA')) {
             updateProgress({
               message: 'Lendo Arquivo de Troca de Códigos',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             troca_codigo.push(...parserProdutoSimilar(tempFilePath))
             troca_codigo_time_in_ms = differenceInMilliseconds(
@@ -248,7 +248,7 @@ export function zipFile(app: FastifyZodTypedInstance) {
           } else if (filenameWithoutExt.includes('VERSOES')) {
             updateProgress({
               message: 'Lendo Arquivo de Versões',
-              percentage: getProgress().percentage + 5,
+              percentage: getProgress().percentage + 4.35,
             })
             versoes.push(...parserProdutoSimilar(tempFilePath))
             versoes_time_in_ms = differenceInMilliseconds(new Date(), startTime)

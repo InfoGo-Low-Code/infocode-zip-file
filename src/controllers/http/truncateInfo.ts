@@ -52,7 +52,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
       try {
         updateProgress({
           message: 'Deletando registros Racionalizados',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_racionalizados = await getAmmountAndTruncate(
           db,
@@ -61,7 +61,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Deletando registros do Relatório de Comunizados',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_relatorio_comunizados = await getAmmountAndTruncate(
           db,
@@ -70,7 +70,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Deletando registros Comunizados',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_comunizados = await getAmmountAndTruncate(
           db,
@@ -79,7 +79,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Deletando registros de Troca de Códigos',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_troca_codigo = await getAmmountAndTruncate(
           db,
@@ -88,13 +88,13 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Deletando registros de Versões',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_versoes = await getAmmountAndTruncate(db, 'VERSOES')
 
         updateProgress({
           message: 'Deletando registros de Cross References',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_cross_references = await getAmmountAndTruncate(
           db,
@@ -103,7 +103,7 @@ export function truncateInfo(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Deletando registros de Produtos',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
         const deleted_produtos = await getAmmountAndTruncate(db, 'PRODUTOS')
 

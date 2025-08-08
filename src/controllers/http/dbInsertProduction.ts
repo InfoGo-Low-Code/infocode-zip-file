@@ -228,7 +228,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
       try {
         updateProgress({
           message: 'Inserindo novos registros Racionalizados',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const {
@@ -249,12 +249,12 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Inserindo novos registros no Relatório de Comunizados',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         updateProgress({
           message: 'Inserindo novos registros Comunizados',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const {
@@ -269,7 +269,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Inserindo novos registros de Troca de Códigos',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const {
@@ -280,7 +280,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Inserindo novos registros de Versões',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const {
@@ -291,7 +291,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Inserindo novos registros de Cross References',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const {
@@ -306,7 +306,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Inserindo novos registros de Produtos',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         const {
@@ -330,7 +330,7 @@ export function dbInsertProduction(app: FastifyZodTypedInstance) {
 
         updateProgress({
           message: 'Processo Finalizado',
-          percentage: getProgress().percentage + 5,
+          percentage: getProgress().percentage + 4.35,
         })
 
         setUpdateInfo({
