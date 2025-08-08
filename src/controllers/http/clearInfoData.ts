@@ -48,6 +48,10 @@ export function clearInfoData(app: FastifyZodTypedInstance) {
         deleted_versoes: 0,
         deleted_cross_references: 0,
         deleted_produtos: 0,
+        inserted_relatorio_comunizados: 0,
+        relatorio_comunizados_time_in_ms: 0,
+        end_date_time_relatorio_comunizados: '',
+        deleted_relatorio_comunizados: 0,
       })
       updateProgress({ message: '', percentage: 0 })
 
