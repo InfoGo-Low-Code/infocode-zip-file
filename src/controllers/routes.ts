@@ -6,6 +6,7 @@ import { verifyRoutes } from './http/verifyRoutes'
 import { dbInsertProduction } from './http/dbInsertProduction'
 import { clearInfoData } from './http/clearInfoData'
 import { fullProcess } from './http/fullProcess'
+import { exportCustomXlsx } from './http/exportCustomXlsx'
 
 export function routes(app: FastifyZodTypedInstance) {
   app.register(zipFile)
@@ -15,4 +16,5 @@ export function routes(app: FastifyZodTypedInstance) {
   app.register(dbInsertProduction)
   app.register(clearInfoData)
   app.register(fullProcess)
+  app.register(exportCustomXlsx)
 }
