@@ -124,7 +124,6 @@ export async function createExcelRacionalizados<K extends keyof QueryResultMap>(
     {
       state: 'frozen',
       ySplit: 2,
-      xSplit: 6,
     },
   ]
 
